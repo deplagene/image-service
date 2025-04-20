@@ -1,0 +1,73 @@
+/* Custom styles */
+#dropZone {
+    transition: all 0.3s ease;
+}
+
+#dropZone.dragover {
+    background-color: rgba(99, 102, 241, 0.1);
+    border-color: #6366f1;
+}
+
+#dropZone.error {
+    border-color: #ef4444;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.processing {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Loading spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(75, 85, 99, 0.3);
+    border-top: 4px solid #6366f1;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Image preview and result styles */
+#imagePreview, #processedImage {
+    transition: all 0.3s ease;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+#imagePreview:hover, #processedImage:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+/* Button hover effects */
+button:hover {
+    transform: translateY(-1px);
+}
+
+/* Error message animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.text-red-500 {
+    animation: shake 0.5s ease-in-out;
+} 
