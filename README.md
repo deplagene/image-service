@@ -94,7 +94,3 @@ go run server.go
 - Уровни: DEBUG, INFO, WARN, ERROR
 - Формат: JSON
 - Контекстная информация
-
-## Лицензия
-
-MIT
