@@ -8,50 +8,35 @@ import (
 )
 
 type Config struct {
-	S3Url              string
-	S3User             string
-	S3Password         string
-	BrokerUser         string
-	BrokerPassword     string
-	BrokerHost         string
-	DatabaseConnString string
-	ApiHost            string
-	ApiPort            string
-	Env                string
+	NsfwApiUrl string
 }
 
-var Envs = initConfig()
+var Envs = mustLoad()
 
-func initConfig() *Config {
+// todo: add logging
+func mustLoad() *Config {
+	const op = "configs.mustLoad"
+
 	if err := godotenv.Load(); err != nil {
 		return &Config{}
 	}
 
 	return &Config{
-		S3Url:              getEnv("MINIO_ROOT_URL", "localhost:9000"),
-		S3User:             getEnv("MINIO_ROOT_USER", "minio"),
-		S3Password:         getEnv("MINIO_ROOT_PASSWORD", "minio"),
-		BrokerUser:         getEnv("RABBITMQ_USERNAME", "guest"),
-		BrokerPassword:     getEnv("RABBITMQ_PASSWORD", "guest"),
-		BrokerHost:         getEnv("RABBITMQ_HOST", "localhost:5672"),
-		DatabaseConnString: getEnv("DB_CONNECTION_STRING", "postgresql://postgres:postgres@localhost:5432/images_service"),
-		ApiHost:            getEnv("API_HOST", "localhost"),
-		ApiPort:            getEnv("API_PORT", "8080"),
-		Env:                getEnv("ENVIRONMENT", "default"),
+		NsfwApiUrl: getEnv("NSFW_API_URL", "http://127.0.0.1:8000/v1/detect"),
 	}
 }
 
 func getEnv(key, fallback string) string {
-	if val, ok := os.LookupEnv(key); ok {
-		return val
+	if value, ok := os.LookupEnv(key); ok {
+		return value
 	}
 
 	return fallback
 }
 
 func getEnvAsInt(key string, fallback int64) int64 {
-	if val, ok := os.LookupEnv(key); ok {
-		i, err := strconv.ParseInt(val, 10, 64)
+	if value, ok := os.LookupEnv(key); ok {
+		i, err := strconv.ParseInt(value, 10, 64)
 		if err != nil {
 			return fallback
 		}
