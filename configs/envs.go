@@ -8,7 +8,9 @@ import (
 )
 
 type Config struct {
-	NsfwApiUrl string
+	NsfwApiUrl    string
+	MinioUser     string
+	MinioPassword string
 }
 
 var Envs = mustLoad()
@@ -22,7 +24,9 @@ func mustLoad() *Config {
 	}
 
 	return &Config{
-		NsfwApiUrl: getEnv("NSFW_API_URL", "http://127.0.0.1:8000/v1/detect"),
+		NsfwApiUrl:    getEnv("NSFW_API_URL", "http://127.0.0.1:8000/v1/detect"),
+		MinioUser:     getEnv("MINIO_ROOT_USER", "deplagene"),
+		MinioPassword: getEnv("MINIO_ROOT_PASSWORD", "deplagene"),
 	}
 }
 
