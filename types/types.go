@@ -31,7 +31,17 @@ type ImageService interface {
 	CheckNsfw(ctx context.Context, image Image) (NsfwResult, error)
 }
 
+type ImageStore interface {
+	Create(ctx context.Context, url string) error
+	GetByUrl(ctx context.Context, url string) (Image, error)
+}
+
 type S3Storage interface {
 	Connect() error
 	Upload(ctx context.Context, image Image) (string, error)
+}
+
+type Broker interface {
+	Publish(ctx context.Context, topic string, data string) error
+	Consume(ctx context.Context, topic string, groupId string) error
 }

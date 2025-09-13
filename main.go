@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -11,7 +12,11 @@ import (
 	"os"
 
 	"deplagene/image-service/configs"
+	"deplagene/image-service/db"
+	"deplagene/image-service/services/images"
 	"deplagene/image-service/types"
+
+	"go.mongodb.org/mongo-driver/v2/mongo/readpref"
 )
 
 func main() {
@@ -32,6 +37,33 @@ func main() {
 		fmt.Printf("Confidence: %.2f%%\n", nsfwResult.ConfidencePercentage)
 	} else {
 		fmt.Printf("%+v\n", nsfwResult)
+	}
+
+	// MongoDb
+	// todo add function's
+	client, err := db.NewMongoClient("mongodb://deplagene:developerdeplagene@localhost:27017")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	ctx := context.TODO()
+
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer func() {
+		if err := client.Disconnect(ctx); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	store := images.NewStore(client)
+
+	err = store.Create(ctx, "some-url.com")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
