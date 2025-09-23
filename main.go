@@ -41,7 +41,7 @@ func main() {
 
 	// MongoDb
 	// todo add function's
-	client, err := db.NewMongoClient("mongodb://deplagene:developerdeplagene@localhost:27017")
+	client, err := db.NewMongoClient(configs.Envs.MongoDbConnUrl)
 	if err != nil {
 		log.Fatal(err)
 	}

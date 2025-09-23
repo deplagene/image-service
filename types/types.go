@@ -5,12 +5,14 @@ import (
 	"io"
 
 	"github.com/google/uuid"
+	"github.com/segmentio/kafka-go"
 )
 
 const (
 	MinConfidenceThreshold = 85.0
 	ImgPath                = "assets/nsfw-content.jpg"
 	UserImagesBucketName   = "user-images"
+	MaxUploadSize          = 10 << 20 // 10 Mb
 )
 
 type NsfwResult struct {
@@ -28,7 +30,9 @@ type Image struct {
 }
 
 type ImageService interface {
-	CheckNsfw(ctx context.Context, image Image) (NsfwResult, error)
+	Upload(ctx context.Context) error
+	CheckImageForNsfwByUrl(ctx context.Context, url string) (NsfwResult, error)
+	CheckImageForNsfwByUpload(ctx context.Context, image Image) (NsfwResult, error)
 }
 
 type ImageStore interface {
@@ -41,7 +45,12 @@ type S3Storage interface {
 	Upload(ctx context.Context, image Image) (string, error)
 }
 
-type Broker interface {
-	Publish(ctx context.Context, topic string, data string) error
-	Consume(ctx context.Context, topic string, groupId string) error
+type Producer interface {
+	Publish(ctx context.Context, msg kafka.Message) error
+	Close() error
+}
+
+type Consumer interface {
+	Consume(handler func(ctx context.Context, msg kafka.Message) error)
+	Close() error 
 }

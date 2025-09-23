@@ -8,9 +8,10 @@ import (
 )
 
 type Config struct {
-	NsfwApiUrl    string
-	MinioUser     string
-	MinioPassword string
+	NsfwApiUrl     string
+	MinioUser      string
+	MinioPassword  string
+	MongoDbConnUrl string
 }
 
 var Envs = mustLoad()
@@ -24,9 +25,10 @@ func mustLoad() *Config {
 	}
 
 	return &Config{
-		NsfwApiUrl:    getEnv("NSFW_API_URL", "http://127.0.0.1:8000/v1/detect"),
-		MinioUser:     getEnv("MINIO_ROOT_USER", "deplagene"),
-		MinioPassword: getEnv("MINIO_ROOT_PASSWORD", "deplagene"),
+		NsfwApiUrl:     getEnv("NSFW_API_URL", "http://127.0.0.1:8000/v1/detect"),
+		MinioUser:      getEnv("MINIO_ROOT_USER", "deplagene"),
+		MinioPassword:  getEnv("MINIO_ROOT_PASSWORD", "deplagene"),
+		MongoDbConnUrl: getEnv("MONGODB_CONN_URL", "mongodb://deplagene:developerdeplagene@localhost:27017"),
 	}
 }
 
